@@ -1,13 +1,25 @@
-import styled from "styled-components";
+import React from "react";
+import { Dashboard, Login, PrivateRoute, AuthWrapper, Error } from "./pages";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   return (
-    <Wrapper>
-        <h1>Hello World!</h1>
-    </Wrapper>
+    <AuthWrapper>
+      <Router>
+        <Switch>
+          <PrivateRoute path="/" exact>
+            <Dashboard />
+          </PrivateRoute>
+          <Route path="/login" exact>
+            <Login />
+          </Route>
+          <Route path="*">
+            <Error />
+          </Route>
+        </Switch>
+      </Router>
+    </AuthWrapper>
   );
 }
-
-const Wrapper = styled.section``;
 
 export default App;
