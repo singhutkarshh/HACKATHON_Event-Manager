@@ -5,6 +5,8 @@ import Cards from "./Cards";
 import NewEvent from "./newEvent";
 const Events = ({ registerAction, deleteAction, updateAction }) => {
   const [addpop, setAddPop] = React.useState(false);
+  const [changed, setChanged] = React.useState(false);
+  const [changed1, setChanged1] = React.useState(false);
   const [dataArray, setDataArray] = React.useState([]);
   const addEventHandler1 = () => {
     setAddPop(true);
@@ -23,9 +25,10 @@ const Events = ({ registerAction, deleteAction, updateAction }) => {
       }
     };
     getData();
-  }, [addpop]);
+  }, [changed, addpop, changed1]);
   console.log(dataArray);
-
+  const upcoming = dataArray[0];
+  console.log(upcoming);
   return (
     <>
       {" "}
@@ -53,6 +56,10 @@ const Events = ({ registerAction, deleteAction, updateAction }) => {
                   data={item}
                   registerAction={registerAction}
                   deleteAction={deleteAction}
+                  setChanged={setChanged}
+                  changed={changed}
+                  setChanged1={setChanged1}
+                  changed1={changed1}
                 />
               );
             })}

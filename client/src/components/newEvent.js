@@ -20,9 +20,8 @@ const NewEvent = ({ setAddPop, updateAction }) => {
         setAddPop(false);
       })
       .catch((error) => console.log(error));
-    setTimeout(() => {
-      updateAction();
-    }, 3000);
+
+    updateAction();
   };
 
   return (

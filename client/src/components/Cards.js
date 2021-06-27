@@ -1,30 +1,75 @@
 import { Paper } from "@material-ui/core";
+import axios from "axios";
 import React from "react";
 import styled from "styled-components";
 
-const Cards = ({ registerAction, deleteAction, data }) => {
-  const { endDate, eventdata, isRegistered, organiser, startDate, id } = data;
-  const registerHandler = () => {
+const Cards = ({
+  registerAction,
+  deleteAction,
+  data,
+  setChanged,
+  changed,
+  setChanged1,
+  changed1,
+}) => {
+  const { endDate, eventdata, isRegistered, organiser, startDate, _id } = data;
+  const registerHandler = async (key) => {
+    await axios.put(`http://localhost:8080/api/note/update`, key);
     registerAction();
+    setChanged1(!changed1);
+  };
+  const registerHandler1 = async (key) => {
+    await axios.put(`http://localhost:8080/api/note/update`, key);
+    setChanged1(!changed1);
+  };
+  const deleteHandler = async (key) => {
+    await axios.delete(`http://localhost:8080/api/note/${key}`);
+    console.log(key);
+    setChanged(!changed);
+    deleteAction();
   };
   return (
     <Wrapper>
       <Paper>
-        <div className="cardsi" key={id}>
+        <div className="cardsi" key={_id}>
           <h4>{eventdata}</h4>
-          <p>{startDate}</p>
-          <p>{endDate}</p>
+          <p>Start date : {startDate}</p>
+          <p>End date : {endDate}</p>
           <div className="btnCon">
             {isRegistered ? (
-              <button className="bt2" onClick={registerHandler}>
+              <button
+                className="bt2"
+                onClick={() =>
+                  registerHandler1({
+                    _id,
+                    eventdata,
+                    startDate,
+                    endDate,
+                    organiser,
+                    isRegistered,
+                  })
+                }
+              >
                 Registered
               </button>
             ) : (
-              <button className="btn" onClick={registerAction}>
+              <button
+                className="btn"
+                onClick={() =>
+                  registerHandler({
+                    _id,
+                    eventdata,
+                    startDate,
+                    endDate,
+                    organiser,
+                    isRegistered,
+                  })
+                }
+              >
                 Register
               </button>
             )}
-            <button className="btn btn1" onClick={deleteAction}>
+            <button className="btn btn1" onClick={(e) => deleteHandler(_id)}>
               Delete
             </button>
           </div>

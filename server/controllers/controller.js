@@ -33,6 +33,40 @@ const createNote = (req, res) => {
       });
     });
 };
+const updateEvent = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  Note.findOne({ _id: body._id }, (err, event) => {
+    if (err) {
+      return res.status(404).json({
+        err,
+        message: "Movie not found!",
+      });
+    }
+    event.isRegistered = !body.isRegistered;
+    event
+      .save()
+      .then(() => {
+        return res.status(200).json({
+          success: true,
+          id: event._id,
+          message: "Movie updated!",
+        });
+      })
+      .catch((error) => {
+        return res.status(404).json({
+          error,
+          message: "Movie not updated!",
+        });
+      });
+  });
+};
 
 const deleteNote = async (req, res) => {
   await Note.findOneAndDelete({ _id: req.params.id }, (err, note) => {
@@ -56,4 +90,4 @@ const getNotes = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 
-module.exports = { createNote, deleteNote, getNotes };
+module.exports = { createNote, deleteNote, getNotes, updateEvent };
