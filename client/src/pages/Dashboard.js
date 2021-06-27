@@ -47,7 +47,9 @@ const Dashboard = () => {
         <Navbar />
 
         {regaction ? (
-          <div className="notifyReg">Registration Successful...!</div>
+          <div className="notifyReg">
+            Registration Successful , Check details{" "}
+          </div>
         ) : (
           <></>
         )}

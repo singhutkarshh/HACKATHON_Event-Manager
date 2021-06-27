@@ -15,7 +15,7 @@ const NewEvent = ({ setAddPop, updateAction }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await axios
-      .post("http://localhost:8080/api/note", postData)
+      .post("https://protected-basin-58955.herokuapp.com/api/note", postData)
       .then(() => {
         setAddPop(false);
       })

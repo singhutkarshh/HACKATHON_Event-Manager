@@ -2,23 +2,26 @@ import axios from "axios";
 import React from "react";
 import styled from "styled-components";
 import Cards from "./Cards";
+import { Paper } from "@material-ui/core";
 import NewEvent from "./newEvent";
 const Events = ({ registerAction, deleteAction, updateAction }) => {
   const [addpop, setAddPop] = React.useState(false);
   const [changed, setChanged] = React.useState(false);
   const [changed1, setChanged1] = React.useState(false);
   const [dataArray, setDataArray] = React.useState([]);
+  const [toggle, setToggle] = React.useState(false);
+  const [details, setDetails] = React.useState();
   const addEventHandler1 = () => {
     setAddPop(true);
   };
 
   React.useEffect(() => {
     const getData = async () => {
-      const response = await axios("http://localhost:8080/api/note").catch(
-        (err) => {
-          console.log(err);
-        }
-      );
+      const response = await axios(
+        "https://protected-basin-58955.herokuapp.com/api/note"
+      ).catch((err) => {
+        console.log(err);
+      });
       if (response) {
         const { data } = response.data;
         setDataArray(data);
@@ -26,15 +29,51 @@ const Events = ({ registerAction, deleteAction, updateAction }) => {
     };
     getData();
   }, [changed, addpop, changed1]);
-  console.log(dataArray);
-  const upcoming = dataArray[0];
-  console.log(upcoming);
-  return (
-    <>
-      {" "}
-      {addpop ? (
-        <NewEvent setAddPop={setAddPop} updateAction={updateAction} />
-      ) : (
+  if (toggle == true)
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Paper
+          style={{
+            width: "40rem",
+            height: "30rem",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            padding: "20px",
+          }}
+        >
+          <h3 style={{ textAlign: "center" }}>Event Details</h3>
+          <p style={{ fontSize: "21px" }}>Event Name : {details.eventdata}</p>
+          <p style={{ fontSize: "21px" }}>Start date : {details.startDate}</p>
+          <p style={{ fontSize: "21px" }}>End date : {details.endDate}</p>
+          <p style={{ fontSize: "21px" }}>Organiser : {details.organiser}</p>
+          {details.isRegistered ? (
+            <p style={{ fontSize: "21px" }}>Registered : Yes</p>
+          ) : (
+            <p style={{ fontSize: "21px" }}>Registered : No </p>
+          )}
+        </Paper>
+        <button
+          className="btn"
+          style={{ marginTop: "2rem" }}
+          onClick={() => setToggle(false)}
+        >
+          Ok
+        </button>
+      </div>
+    );
+  else if (addpop)
+    return <NewEvent setAddPop={setAddPop} updateAction={updateAction} />;
+  else
+    return (
+      <>
         <Wrapper>
           <div className="header">
             <h1 className="heading">Upcoming Events</h1>
@@ -47,7 +86,7 @@ const Events = ({ registerAction, deleteAction, updateAction }) => {
             </button>
           </div>
           <div className="eventBroadcast">
-            <h4>Latest Upcoming : </h4>
+            <h4>Latest upcoming event : codechef contest</h4>
           </div>
           <span className="eventCards">
             {dataArray.map((item) => {
@@ -60,14 +99,15 @@ const Events = ({ registerAction, deleteAction, updateAction }) => {
                   changed={changed}
                   setChanged1={setChanged1}
                   changed1={changed1}
+                  setToggle={setToggle}
+                  setDetails={setDetails}
                 />
               );
             })}
           </span>
         </Wrapper>
-      )}
-    </>
-  );
+      </>
+    );
 };
 
 const Wrapper = styled.section`

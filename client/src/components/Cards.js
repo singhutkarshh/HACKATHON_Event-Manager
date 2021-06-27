@@ -11,28 +11,66 @@ const Cards = ({
   changed,
   setChanged1,
   changed1,
+  setToggle,
+  setDetails,
 }) => {
   const { endDate, eventdata, isRegistered, organiser, startDate, _id } = data;
+
   const registerHandler = async (key) => {
-    await axios.put(`http://localhost:8080/api/note/update`, key);
+    await axios.put(
+      `https://protected-basin-58955.herokuapp.com/api/note/update`,
+      key
+    );
     registerAction();
     setChanged1(!changed1);
   };
   const registerHandler1 = async (key) => {
-    await axios.put(`http://localhost:8080/api/note/update`, key);
+    await axios.put(
+      `https://protected-basin-58955.herokuapp.com/api/note/update`,
+      key
+    );
     setChanged1(!changed1);
   };
   const deleteHandler = async (key) => {
-    await axios.delete(`http://localhost:8080/api/note/${key}`);
+    await axios.delete(
+      `https://protected-basin-58955.herokuapp.com/api/note/${key}`
+    );
     console.log(key);
     setChanged(!changed);
     deleteAction();
   };
+
+  const detailHandler = (key) => {
+    setToggle(true);
+    setDetails(key);
+  };
+
   return (
     <Wrapper>
       <Paper>
         <div className="cardsi" key={_id}>
-          <h4>{eventdata}</h4>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h4>{eventdata}</h4>
+            <button
+              onClick={() =>
+                detailHandler({
+                  _id,
+                  eventdata,
+                  startDate,
+                  endDate,
+                  organiser,
+                  isRegistered,
+                })
+              }
+              style={{
+                padding: "6px 10px",
+                color: "black",
+                backgroundColor: "white",
+              }}
+            >
+              Details
+            </button>
+          </div>
           <p>Start date : {startDate}</p>
           <p>End date : {endDate}</p>
           <div className="btnCon">
