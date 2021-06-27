@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Cards from "./Cards";
 import { Paper } from "@material-ui/core";
 import NewEvent from "./newEvent";
+import loadingGif from "../images/preloader.gif";
+
 const Events = ({ registerAction, deleteAction, updateAction }) => {
   const [addpop, setAddPop] = React.useState(false);
   const [changed, setChanged] = React.useState(false);
@@ -11,6 +13,8 @@ const Events = ({ registerAction, deleteAction, updateAction }) => {
   const [dataArray, setDataArray] = React.useState([]);
   const [toggle, setToggle] = React.useState(false);
   const [details, setDetails] = React.useState();
+  const [isLoading, setIsLoading] = React.useState(true);
+
   const addEventHandler1 = () => {
     setAddPop(true);
   };
@@ -25,6 +29,7 @@ const Events = ({ registerAction, deleteAction, updateAction }) => {
       if (response) {
         const { data } = response.data;
         setDataArray(data);
+        setIsLoading(false);
       }
     };
     getData();
@@ -74,38 +79,42 @@ const Events = ({ registerAction, deleteAction, updateAction }) => {
   else
     return (
       <>
-        <Wrapper>
-          <div className="header">
-            <h1 className="heading">Upcoming Events</h1>
-            <button
-              className="btn"
-              style={{ backgroundColor: "blue" }}
-              onClick={addEventHandler1}
-            >
-              Add new event
-            </button>
-          </div>
-          <div className="eventBroadcast">
-            <h4>Latest upcoming event : codechef contest</h4>
-          </div>
-          <span className="eventCards">
-            {dataArray.map((item) => {
-              return (
-                <Cards
-                  data={item}
-                  registerAction={registerAction}
-                  deleteAction={deleteAction}
-                  setChanged={setChanged}
-                  changed={changed}
-                  setChanged1={setChanged1}
-                  changed1={changed1}
-                  setToggle={setToggle}
-                  setDetails={setDetails}
-                />
-              );
-            })}
-          </span>
-        </Wrapper>
+        {isLoading ? (
+          <loadingGif />
+        ) : (
+          <Wrapper>
+            <div className="header">
+              <h1 className="heading">Upcoming Events</h1>
+              <button
+                className="btn"
+                style={{ backgroundColor: "blue" }}
+                onClick={addEventHandler1}
+              >
+                Add new event
+              </button>
+            </div>
+            <div className="eventBroadcast">
+              <h4>Latest upcoming event : codechef contest</h4>
+            </div>
+            <span className="eventCards">
+              {dataArray.map((item) => {
+                return (
+                  <Cards
+                    data={item}
+                    registerAction={registerAction}
+                    deleteAction={deleteAction}
+                    setChanged={setChanged}
+                    changed={changed}
+                    setChanged1={setChanged1}
+                    changed1={changed1}
+                    setToggle={setToggle}
+                    setDetails={setDetails}
+                  />
+                );
+              })}
+            </span>
+          </Wrapper>
+        )}
       </>
     );
 };
