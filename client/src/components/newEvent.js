@@ -1,17 +1,28 @@
 import React from "react";
+import axios from "axios";
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
 import useStyles from "./styles";
-const NewEvent = ({ setAddPop }) => {
+const NewEvent = ({ setAddPop, updateAction }) => {
   const classes = useStyles();
   const [postData, setPostData] = React.useState({
     eventdata: "",
     startDate: "",
     endDate: "",
     organiser: "",
+    isRegistered: false,
   });
 
-  const handleSubmit = () => {
-    setAddPop(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await axios
+      .post("http://localhost:8080/api/note", postData)
+      .then(() => {
+        setAddPop(false);
+      })
+      .catch((error) => console.log(error));
+    setTimeout(() => {
+      updateAction();
+    }, 3000);
   };
 
   return (

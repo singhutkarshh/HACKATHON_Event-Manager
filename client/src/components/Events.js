@@ -1,20 +1,36 @@
+import axios from "axios";
 import React from "react";
 import styled from "styled-components";
 import Cards from "./Cards";
 import NewEvent from "./newEvent";
-const Events = ({ registerAction, deleteAction }) => {
+const Events = ({ registerAction, deleteAction, updateAction }) => {
   const [addpop, setAddPop] = React.useState(false);
-
-  const addEventHandler = () => {
+  const [dataArray, setDataArray] = React.useState([]);
+  const addEventHandler1 = () => {
     setAddPop(true);
   };
-  React.useEffect(() => {}, [addpop]);
+
+  React.useEffect(() => {
+    const getData = async () => {
+      const response = await axios("http://localhost:8080/api/note").catch(
+        (err) => {
+          console.log(err);
+        }
+      );
+      if (response) {
+        const { data } = response.data;
+        setDataArray(data);
+      }
+    };
+    getData();
+  }, [addpop]);
+  console.log(dataArray);
 
   return (
     <>
       {" "}
       {addpop ? (
-        <NewEvent setAddPop={setAddPop} />
+        <NewEvent setAddPop={setAddPop} updateAction={updateAction} />
       ) : (
         <Wrapper>
           <div className="header">
@@ -22,43 +38,24 @@ const Events = ({ registerAction, deleteAction }) => {
             <button
               className="btn"
               style={{ backgroundColor: "blue" }}
-              onClick={addEventHandler}
+              onClick={addEventHandler1}
             >
               Add new event
             </button>
           </div>
           <div className="eventBroadcast">
-            <h4>Latest Upcoming : bla bla bla ....</h4>
+            <h4>Latest Upcoming : </h4>
           </div>
           <span className="eventCards">
-            <Cards
-              registerAction={registerAction}
-              deleteAction={deleteAction}
-            />
-            <Cards
-              registerAction={registerAction}
-              deleteAction={deleteAction}
-            />
-            <Cards
-              registerAction={registerAction}
-              deleteAction={deleteAction}
-            />
-            <Cards
-              registerAction={registerAction}
-              deleteAction={deleteAction}
-            />
-            <Cards
-              registerAction={registerAction}
-              deleteAction={deleteAction}
-            />
-            <Cards
-              registerAction={registerAction}
-              deleteAction={deleteAction}
-            />
-            <Cards
-              registerAction={registerAction}
-              deleteAction={deleteAction}
-            />
+            {dataArray.map((item) => {
+              return (
+                <Cards
+                  data={item}
+                  registerAction={registerAction}
+                  deleteAction={deleteAction}
+                />
+              );
+            })}
           </span>
         </Wrapper>
       )}

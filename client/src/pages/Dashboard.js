@@ -11,6 +11,7 @@ const Dashboard = () => {
 
   const [regaction, setRegAction] = React.useState(false);
   const [delaction, setDelAction] = React.useState(false);
+  const [updaction, setUpdAction] = React.useState(false);
 
   const registerAction = () => {
     setRegAction(true);
@@ -18,10 +19,17 @@ const Dashboard = () => {
       setRegAction(false);
     }, 2000);
   };
+
   const deleteAction = () => {
     setDelAction(true);
     setTimeout(() => {
       setDelAction(false);
+    }, 2000);
+  };
+  const updateAction = () => {
+    setUpdAction(true);
+    setTimeout(() => {
+      setUpdAction(false);
     }, 2000);
   };
   if (isloading) {
@@ -48,8 +56,17 @@ const Dashboard = () => {
         ) : (
           <></>
         )}
+        {updaction ? (
+          <div className="notifyUpdate">Event Added Successfully...!</div>
+        ) : (
+          <></>
+        )}
 
-        <Events registerAction={registerAction} deleteAction={deleteAction} />
+        <Events
+          registerAction={registerAction}
+          deleteAction={deleteAction}
+          updateAction={updateAction}
+        />
         {/* <About /> */}
       </Wrapper>
     </main>
@@ -80,5 +97,17 @@ const Wrapper = styled.section`
     padding-left: 3rem;
     background-color: green;
   }
+  .notifyUpdate {
+    z-index: 100;
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    padding-left: 3rem;
+    background-color: blue;
+  }
 `;
+
 export default Dashboard;
